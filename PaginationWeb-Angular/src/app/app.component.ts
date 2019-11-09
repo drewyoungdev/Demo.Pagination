@@ -20,8 +20,6 @@ interface PagedResult {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private url = "http://localhost:5000/api/values/paginated";
-
   pagedResult: PagedResult;
 
   constructor(private http: HttpClient) { }
@@ -31,7 +29,7 @@ export class AppComponent implements OnInit {
   }
 
   goTo(pageNumber: number) {
-    this.http.get<PagedResult>(`${this.url}/?currentPageNumber=${pageNumber}`)
+    this.http.get<PagedResult>(`http://localhost:5000/api/values/paginated/?currentPageNumber=${pageNumber}`)
       .subscribe(
         pagedResult => { this.pagedResult = pagedResult; }
       );

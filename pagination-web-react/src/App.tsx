@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './App.scss';
-import PaginatedTable from './components/PaginatedTable/PaginatedTable';
+import PaginatedTable from './components/PaginatedTable';
 import { PagedResult } from './models/PagedResult';
+import './App.scss';
 
 const App: React.FC = () => {
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
-  // better way to initialize this state?
-  const [pagedResult, setPagedResult] = useState<PagedResult>({ currentPage: 1, itemsPerPage: 1, totalItems: 1, pageCount: 1, items: []});
+  const [pagedResult, setPagedResult] = useState<PagedResult>();
 
   // useEffect will re-run whenever currentPageNumber is updated
   useEffect(() => {
