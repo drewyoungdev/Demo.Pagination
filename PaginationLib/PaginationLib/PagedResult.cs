@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace PaginationLib
 {
-    // naming convention is based on UI component library
     public class PagedResult<T>
     {
         public int CurrentPage { get; }
