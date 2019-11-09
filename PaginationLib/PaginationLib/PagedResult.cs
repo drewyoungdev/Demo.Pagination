@@ -4,35 +4,44 @@ using System.Linq;
 
 namespace PaginationLib
 {
+    // naming convention is based on UI component library
     public class PagedResult<T>
     {
-        // naming convention is based on UI component library
         public int CurrentPage { get; }
         public int ItemsPerPage { get; }
         public int TotalItems { get; }
         public int PageCount => (int)Math.Ceiling(decimal.Divide(TotalItems, ItemsPerPage));
-
         public IEnumerable<T> Items { get; }
 
         public PagedResult(
             IEnumerable<T> items,
             int currentPageNumber,
-            int itemsPerPage)
+            int itemsPerPage,
+            int totalItems)
         {
-            // is converting to list practical? Or should we detect what type is being sent in
             Items = items;
             CurrentPage = currentPageNumber;
             ItemsPerPage = itemsPerPage;
-            TotalItems = items.Count();
+            TotalItems = totalItems;
         }
     }
 
     public static class PaginationExtensions
     {
-        // public static PagedResult<T> ToPagedResult<T>(this IEnumerable<T> enumerable)
-        // {
+        public static PagedResult<T> ToPagedResult<T>(
+            this IEnumerable<T> enumerable,
+            int currentPageNumber,
+            int itemsPerPage)
+        {
+            var paginatedEnumerable = enumerable
+                .Paginate(currentPageNumber, itemsPerPage);
 
-        // }
+            return new PagedResult<T>(
+                paginatedEnumerable,
+                currentPageNumber,
+                itemsPerPage,
+                enumerable.Count());
+        }
 
          public static IEnumerable<T> Paginate<T>(
             this IEnumerable<T> enumerable,
@@ -41,9 +50,8 @@ namespace PaginationLib
         {
             if (currentPageNumber == 0)
             {
-                // current page number must start at at least 1
                 throw new InvalidCurrentPageNumberException(
-                    $"Invalid currentPageNumber: {currentPageNumber} when attempting to paginate. This value must be greater than 0."
+                    $"Invalid currentPageNumber: {currentPageNumber}. This value must be greater than 0."
                 );
             }
 
@@ -57,8 +65,6 @@ namespace PaginationLib
 
     public class InvalidCurrentPageNumberException : Exception
     {
-        public InvalidCurrentPageNumberException(string message) : base(message)
-        {
-        }
+        public InvalidCurrentPageNumberException(string message) : base(message) { }
     }
 }

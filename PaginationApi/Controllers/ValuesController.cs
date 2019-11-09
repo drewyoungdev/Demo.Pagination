@@ -4,40 +4,38 @@ using PaginationLib;
 
 namespace PaginationApi.Controllers
 {
-    public class TestClass
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
-
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        private IEnumerable<TestClass> GetListOfTestObjects(int numberOfTestObjects)
+        private const int TEST_NUMBER_OF_OBJECTS = 100;
+        private const int ITEMS_PER_PAGE = 5;
+
+        private IEnumerable<object> GetListOfTestObjects()
         {
-            for (int i = 1; i <= numberOfTestObjects; i++)
-                yield return new TestClass() { Id = i, Name = $"Name of {i}"};
+            for (int i = 1; i <= TEST_NUMBER_OF_OBJECTS; i++)
+                yield return new { Id = i, Name = $"Name of {i}"};
         }
 
         // GET api/values
+        // No pagination
         [HttpGet]
-        public ActionResult<IEnumerable<TestClass>> Get()
+        public ActionResult<IEnumerable<object>> Get()
         {
-            var items = GetListOfTestObjects(100);
+            var items = GetListOfTestObjects();
 
             return Ok(items);
         }
 
         // GET api/values/paginated
+        // Alternatively we could allow clients to send in their own "items per page".
+        // In this example we just control it from API to keep the endpoint query params minimal.
+        // On initial GET of this endpoint (no query params), we just pull the first page for the client.
         [HttpGet("paginated")]
-        public ActionResult<PagedResult<TestClass>> GetPaginated(
-            int currentPageNumber = 1,
-            int itemsPerPage = 1)
+        public ActionResult<PagedResult<object>> GetPaginated(int currentPageNumber = 1)
         {
-            var items = GetListOfTestObjects(100).Paginate(currentPageNumber, itemsPerPage);
-
-            var pagedResult = new PagedResult<TestClass>(items, currentPageNumber, itemsPerPage);
+            var pagedResult = GetListOfTestObjects()
+                .ToPagedResult(currentPageNumber, ITEMS_PER_PAGE);
 
             return Ok(pagedResult);
         }
