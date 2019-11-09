@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using PaginationLib;
 
 namespace PaginationApi.Controllers
 {
@@ -21,13 +22,24 @@ namespace PaginationApi.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<TestClass>> Get(
+        public ActionResult<IEnumerable<TestClass>> Get()
+        {
+            var items = GetListOfTestObjects(100);
+
+            return Ok(items);
+        }
+
+        // GET api/values/paginated
+        [HttpGet("paginated")]
+        public ActionResult<PagedResult<TestClass>> GetPaginated(
             int currentPageNumber = 1,
             int itemsPerPage = 1)
         {
-            var results = GetListOfTestObjects(100);
+            var items = GetListOfTestObjects(100).Paginate(currentPageNumber, itemsPerPage);
 
-            return Ok(results);
+            var pagedResult = new PagedResult<TestClass>(items, currentPageNumber, itemsPerPage);
+
+            return Ok(pagedResult);
         }
     }
 }

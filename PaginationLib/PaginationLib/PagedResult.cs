@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PaginationLib
 {
-    public class PagedResult<T> where T : IEnumerable<T>
+    public class PagedResult<T>
     {
         // naming convention is based on UI component library
         public int CurrentPage { get; }
@@ -12,10 +12,10 @@ namespace PaginationLib
         public int TotalItems { get; }
         public int PageCount => (int)Math.Ceiling(decimal.Divide(TotalItems, ItemsPerPage));
 
-        public T Items { get; }
+        public IEnumerable<T> Items { get; }
 
         public PagedResult(
-            T items,
+            IEnumerable<T> items,
             int currentPageNumber,
             int itemsPerPage)
         {
@@ -29,6 +29,11 @@ namespace PaginationLib
 
     public static class PaginationExtensions
     {
+        // public static PagedResult<T> ToPagedResult<T>(this IEnumerable<T> enumerable)
+        // {
+
+        // }
+
          public static IEnumerable<T> Paginate<T>(
             this IEnumerable<T> enumerable,
             int currentPageNumber,
