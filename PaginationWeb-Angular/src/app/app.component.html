@@ -1,33 +1,19 @@
-<div class="container">
+<div
+  *ngIf="pagedResult"
+  class="container"
+>
   <div class="sprk-u-mtl">
     <sprk-table>
       <thead sprkTableHead>
         <tr>
-          <th>Column Heading</th>
-          <th>Column Heading</th>
-          <th>Column Heading</th>
+          <th>Id</th>
+          <th>Name</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
-        </tr>
-        <tr>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
-        </tr>
-        <tr>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
-        </tr>
-        <tr>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
+        <tr *ngFor="let item of pagedResult.items">
+          <td>{{item.id}}</td>
+          <td>{{item.name}}</td>
         </tr>
       </tbody>
     </sprk-table>
@@ -35,12 +21,12 @@
 
   <div class="sprk-u-mtl">
     <sprk-pagination
-      [currentPage]="11"
-      [totalItems]="22"
-      [itemsPerPage]="1"
-      (previousClick)="yourGoBackFunction($event, currentPage)"
-      (pageClick)="yourGoToPageFunction($event, currentPage)"
-      (nextClick)="yourGoForwardFunction($event, currentPage)"
+      [currentPage]="pagedResult.currentPage"
+      [totalItems]="pagedResult.totalItems"
+      [itemsPerPage]="pagedResult.itemsPerPage"
+      (previousClick)="goTo(pagedResult.currentPage - 1)"
+      (pageClick)="goTo($event.page)"
+      (nextClick)="goTo(pagedResult.currentPage + 1)"
     >
     </sprk-pagination>
   </div>
