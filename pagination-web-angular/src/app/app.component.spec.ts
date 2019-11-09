@@ -16,16 +16,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'PaginationWeb-Angular'`, () => {
+  it(`should have as title 'pagination-web-angular'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('PaginationWeb-Angular');
+    expect(app.title).toEqual('pagination-web-angular');
   });
 
   it('should render title in a h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to PaginationWeb-Angular!');
+    expect(compiled.querySelector('h1').textContent).toContain('Welcome to pagination-web-angular!');
   });
 });
