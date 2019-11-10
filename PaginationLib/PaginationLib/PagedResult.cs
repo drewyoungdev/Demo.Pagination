@@ -35,6 +35,11 @@ namespace PaginationLib
             var paginatedEnumerable = enumerable
                 .Paginate(currentPageNumber, itemsPerPage);
 
+            // Potential unexpected enumeration may occur here for caller
+            // paginatedEnumerable will await it's state machine to be called as it's reference is just stored within PagedResult
+            // However, the enumerable.Count() will enumerate in the current state when this method is called.
+            // Potential fixes:
+            // Would this serve better as extension to a collection such as List<T> rather than IEnumerable<T>? We could also just pull .Count rather than executing .Count()
             return new PagedResult<T>(
                 paginatedEnumerable,
                 currentPageNumber,
