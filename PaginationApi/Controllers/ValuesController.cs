@@ -9,7 +9,7 @@ namespace PaginationApi.Controllers
     public class ValuesController : ControllerBase
     {
         private const int TEST_NUMBER_OF_OBJECTS = 100;
-        private const int ITEMS_PER_PAGE = 5;
+        private const int DEFAULT_ITEMS_PER_PAGE = 5;
 
         private IEnumerable<object> GetListOfTestObjects()
         {
@@ -32,10 +32,13 @@ namespace PaginationApi.Controllers
         // In this example we just control it from API to keep the endpoint query params minimal.
         // On initial GET of this endpoint (no query params), we just pull the first page for the client.
         [HttpGet("paginated")]
-        public ActionResult<PagedResult<object>> GetPaginated(int currentPageNumber = 1)
+        public ActionResult<PagedResult<object>> GetPaginated(int? currentPageNumber, int? pageSize)
         {
+            var currentPageNo = currentPageNumber ?? 1;
+            var itemsPerPage = pageSize ?? DEFAULT_ITEMS_PER_PAGE;
+
             var pagedResult = GetListOfTestObjects()
-                .ToPagedResult(currentPageNumber, ITEMS_PER_PAGE);
+                .ToPagedResult(currentPageNo, itemsPerPage);
 
             return Ok(pagedResult);
         }
